@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Example with JSX and ES6 features</title>
+  </head>
+  <body>
+    <h1>AGL Developer Test with ES2015 using babel.js</h1>
+    <h5>Male</h5>
+    <ul class="male-owners"></ul>
+    <h5>Female</h5>
+    <ul class="female-owners"></ul>
+
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+    <script type="text/babel">
+
+function showCats(people) {
+  (['Female', 'Male']).forEach(function(gender) {
+    people
+      .filter((person) => person.gender === gender)
+      .map((person) => person.pets)
+      .filter(Boolean)                      //compact array
+      .reduce((a, b) => a.concat(b), [])    //flatten array
+      .filter((pet) => pet.type === 'Cat')
+      .map((cat) => cat.name)
+      .sort()
+      .forEach(function(catName) {
+        $('.' + gender.toLowerCase() + '-owners')
+          .append('<li>' + catName + '</li>')
+      })
+  })
+}
+
+$.ajax({
+    type: 'GET',
+    url: "http://agl-developer-test.azurewebsites.net/people.json",
+    dataType: "jsonp"
+  })
+  .done(showCats)
+  .fail(function(jqxhr, textStatus, error) {
+    var err = textStatus + ", " + error;
+    console.log("Request Failed: " + err);
+  });
+
+    </script>
+
+  </body>
+</html>
